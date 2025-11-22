@@ -1,8 +1,19 @@
 import Note from "../models/Note.js";
 
-/* export const getAllNotes = (req, res) => {
-  res.status(200).send("Successfully fetched"); First way to export 
+/* First way to export 
+
+export const getAllNotes = (req, res) => {
+  res.status(200).send("Successfully fetched"); 
 };
+*/
+
+/* Another way to export
+
+export function updateAllNotes(req, res) {
+  
+  res.status(201).json({ message: "Successfully updated" });  
+}
+
 */
 
 export async function getAllNotes(req, res) {
@@ -27,8 +38,18 @@ export async function postAllNotes(req, res) {
   }
 }
 
-export function updateAllNotes(req, res) {
-  res.status(201).json({ message: "Successfully updated" }); // Another way to export
+export async function updateAllNotes(req, res) {
+
+  try {
+    const {title, content} = req.body
+    await Note.findByIdAndUpdate(req.params.id,{title,content})
+    res.status(201).json({message:"Successfully updated"})
+  } catch (error) {
+
+    console.error("Error in the updateAllNotes controller", error);
+    res.status(500).json({ message: "Internal server error" });
+    
+  }
 }
 
 export function deleteAllNotes(req, res) {
